@@ -23,7 +23,7 @@ Tags: 《C++ Concurrency in Action》
 
      多核处理器（主要是单芯多核处理器）同时处理多个任务，称之为。
 
-![avatar](https://github.com/Mighty-Frog/Concurrecy-Programming-Notes-CN-version/blob/photos/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC%2B%2B%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC%2B%2B%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled.png)
+![Image text](https://github.com/Mighty-Frog/Concurrecy-Programming-Notes-CN-version/blob/photos/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC%2B%2B%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC%2B%2B%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled.png)
 
 图 1.1 并发的两种方式：双核机器的真正并行 Vs. 单核机器的任务切换。 每个任务切分成了10个相等大小的块。双核处理器上每个任务可以在各自的处理核心上执行：单核处理器上每个任务交织进行。
 
