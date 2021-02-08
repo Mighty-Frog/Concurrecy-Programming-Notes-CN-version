@@ -1,37 +1,225 @@
-## Welcome to GitHub Pages
+# 第一章 你好，C++的并发世界 - 《C++ Concurrency in Action》
 
-You can use the [editor on GitHub](https://github.com/Mighty-Frog/Concurrecy-Programming-Notes-CN-version/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
+Created: Jan 28, 2021 2:23 AM
+ID: 20000000001
+Tags: 《C++ Concurrency in Action》
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+- 何谓并发和多线程r
+- 应用程序为什么要使用并发和多线程
+- C++的并发史
+- 一个简单的C++多线程程序
 
-### Markdown
+# 1.1 何谓并发
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+           两个以上独立活动的同时进行。
 
-```markdown
-Syntax highlighted code block
+### **1.1.1 计算机系统中的并发**
 
-# Header 1
-## Header 2
-### Header 3
+          **并发的假象：**
 
-- Bulleted
-- List
+           单处理单元（processing unit） or 核心（core）同一时间只能处理一个任务，但在短时间内进行了多次的任务切换，看起来是并发的。
 
-1. Numbered
-2. List
+     **硬件并发（hardware concurrency）**：
 
-**Bold** and _Italic_ and `Code` text
+     多核处理器（主要是单芯多核处理器）同时处理多个任务，称之为。
 
-[Link](url) and ![Image](src)
+![%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC++%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC++%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled.png](%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC++%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC++%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled.png)
+
+图 1.1 并发的两种方式：双核机器的真正并行 Vs. 单核机器的任务切换。 每个任务切分成了10个相等大小的块。双核处理器上每个任务可以在各自的处理核心上执行：单核处理器上每个任务交织进行。
+
+单核处理器为了实现交织，从一个任务切换到另一个任务需要切换一次上下文（context switch），这个动作有时间消耗，OS也要为当前运行的任务保存CPU状态和指令指针，同时要计算切换到哪个任务，为即将切换到的任务加载处理器状态。然后CPU需要将新任务的指令和数据载入到缓存中，这样会造成更多延迟。
+
+有的处理器一个核心可以执行多个线程（目前很多处理器是这样），但hardware concurrency在多核或多处理器上效果更好。
+
+**任务切换也适用多线程。**即使是有真正硬件并发的系统，也容易出现比硬件“可并行最大任务数”更多的任务要执行**。此种情况下，任务切换仍然适用**
+
+![%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC++%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC++%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled%201.png](%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC++%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC++%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled%201.png)
+
+图1.2 四个任务在两个核心之间切换，仍将任务整齐地划分为同等大小块的理想情况。实际上，许多因素会使得分割不均和调度不规则。
+
+### 1.1.2 并发的途径
+
+          两个程序员在两个独立的办公室一起做一个软件项目，每个开发人员代表一个线程，每个办公室代表一个进程。在两个办公室独立办公叫多进程并发，在一个办公室工作叫多线程并发。
+
+多进程并发
+
+应用程序分为多个独立的进程，它们在同一时刻运行，就像同时进行网页浏览和文字处理一样。多者通多进程间常规的通信渠道传递讯息 (信号、套接字、文件、管道等等)。
+
+![%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC++%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC++%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled%202.png](%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC++%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC++%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled%202.png)
+
+图 1.3 一对并发运行的进程之间的通信
+
+特点：进程间有保护操作、可分布式运行
+
+好处：进程间有OS提供的保护操作、更高级别的通信机制，意味着可以更安全地处理并发。如在Erlang将进程作为并发的基本构造块。
+
+此外，可以使用远程连接 (可能需要联网) 的方式，在不同的机器上运行独立的进程。虽然，这增加了通信成本，但在设计精良的系统上，这可能是一个提高并行可用行和性能的低成本方式。
+
+代价：设置复杂，速度慢，
+
+这是因为操作系统会在进程间提供了一定的保护措施，以避免一个进程去修改另一个进程的数据。
+
+还有一个缺点是，运行多个进程所需的固定开销：需要时间启动进程，操作系统需要内部资源来管理进程，等等
+
+多线程并发
+
+单个进程运行多个线程。进程中所有线程共享地址空间，且所有线程访问到的大部分数据——全局变量仍是全局的，指针、对象的引用可以在线程间传递。
+
+相比较下，进程间通常共享内存，但此种共享难以建立和管理（同一数据的内存地址在不同的进程中是不相同的）
+
+![%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC++%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC++%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled%203.png](%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC++%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC++%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled%203.png)
+
+图 1.4 同一进程中的一对并发运行的线程之间的通信
+
+特点：地址空间共享，线程间数据无保护
+
+好处：操作系统工作减小，多线程开销远小于多进程。
+
+代价：需要大量工作确保每个线程访问到的数据是一致的
+
+取舍 
+
+单进程中多线程间通信的开销远小于进程间的通信（包含启动），若不考虑共享内存可能带来的问题，多线程将会成为主流语言（包括C++）更青睐的并发途径。
+
+注：C++标准并未对进程间通信提供任何原生支持，所以使用多进程的方式实现，这会依赖与平台相关的 API。因此，本书只关注使用多线程的并发，并且在此之后所提到 “并发”，均假设为多线程来实现。
+
+# 1.2 为什么使用并发
+
+### 1.2.1 为了分离关注点
+
+          将相关代码和无关代码分离，使得程序更容易理解和测试，减少出错的可能。如DVD中将图像和声音的解码（播放代码）与用户输入（用户界面代码）相分离。若是单线程，需要在播放期间定期检查用户输入。若是多线程则两部分代码分离，不过任务间需要人为关联。
+
+### 1.2.2 为了性能
+
+单核性能发展趋向瓶颈，计算能力提高主要依靠多核下的任务并行。
+
+两种并行：
+
+一，将单个任务分成几部分，各自并行运行，即任务并行（task parallelism）
+
+二，每个线程在不同的数据上进行相同的操作，即数据并行（data parallelism）
+
+     
+
+任务并行施行起来并不容易，因为任务间可能存在依赖。数据并行是在同样的时间内处理了更多数据，比如并行处理图片的部分，提高视频的分辨率。
+
+### 1.2.3 什么时候不使用并发
+
+收益比不上成本
+
+成本：代码难以理解，编写和维护成本高。同时高复杂性可能会带来更多错误。
+
+收益不及预期，操作系统需要分配内核相关资源和堆栈空间，启动线程存在固有开销。如果多线程上的任务完成很快，但是启动时间相对过长，那么使用多线程还不如直接使用“产生线程”的方式。
+
+运行越多的线程，操作系统就需要越多的上下文切换，每一次切换都会耗费时间。
+
+每个线程需要一个独立的堆栈空间，太多线程会耗尽可用内存或地址空间，特别是32位操作系统（只有4GB地址空间）。虽然可以使用线程池来限制线程数量，但也有其自身限制（第九章）
+
+# 1.3 C++的并发史
+
+### 1.3.1 C++多线程历史
+
+C++98(1998) 不承认线程存在，内存模型也没有定义。 但是编译器提供商添加了多线程API，但其往往只能使用平台相关的C语言API。
+
+由于不满足平台相关的多线程API，C++程序员希望可以使用类库来提供面向对象的多线程工具。如应用框架MFC，和Boost、ACE积累了多组类的通用C++类库，封装了底层平台相关的API，并且提供了用来简化任务的高级多线程工具。
+
+各种类库在细节有差异，但是在启动新线程方面，总体构造大同小异。比如带锁的RAII（Resource Acquisition Is Initialization）获取资源即初始化。，确保但退出相关作用域是互斥元解锁。
+
+然而，
+
+即使出现了与平台无关的C++类库，但是由于缺乏统一的标准支持，缺少统一的线程内存模型，尤其在跨硬件和跨平台相关的多线程应用上会出现一些明显的问题。
+
+### 1.3.2 新标准支持并发
+
+C++11标准
+
+首先
+
+有了一个全新的线程感知内存模型，
+
+其次标准库也有拓展：
+
+线程管理（第二章）
+
+保护共享数据（第三章）
+
+线程同步操作（第四章）
+
+低级原子操作（第五章）
+
+并且
+
+对编程语言自身也有改善（附录A）
+
+同时
+
+直接支持原子操作，允许程序员通过定义语义来编写代码，无需了解平台相关的汇编指令。
+
+好处：编译器可以搞定多平台，代码好移植；还可以编写优化器来解释操作语义，让程序整体更好优化。
+
+新C++线程库以Boost线程库作为主要模型，继承和很多相同的名称和结构。
+
+## 1.3.3 C++线程库的效率
+
+提供高级工具的同时，也整合了一些底层工具
+
+C++标准委员会在设计标准库时，特别是设计标准线程库的时候，就已经注意到了使用高级工具和使用低级工具的开销差，即抽象代价(abstraction penalty)。因此为了效率，C++类整合了一些底层工具。目的就是在实现相同功能的前提下，直接使用底层API并不会带来过多的性能收益。
+
+个人注释：使用C++新标准下的高级工具，配合新提供的底层工具，可以缩小通常意义上直接使用高级工具带来的开销差。
+
+低级工具
+
+伴随新的内存模型出现了一个综合的原子操作库，可直控制单个位、字节、内部线程间同步，以及所有变化的可见性。这些地方以前是平台相关的汇编代码。此变化使得用新标准下的代码有更好的可移植性，易维护性。
+
+高级工具
+
+高级别的抽象和工具使得编写多线程代码更加简单，虽然会因为额外代码带来性能开销，但不一定意味着更高的抽象代价，手工编写等效函数可能效率更低，且编译器会很好地内联大部分额外代码。
+
+重视高性能情况下
+
+如果高级工具带来的开销过高，最好通过低级别工具实现需要的功能。
+
+“绝大多数情况下，额外增加的复杂性和出错几率都远大于性能的小幅提升带来的收益”
+
+例如，如果过多的线程竞争一个互斥单元，将会很明显的影响性能。与其在互斥操作上耗费时间，不如重新设计应用，减少互斥元上的竞争来得划算。
+
+### 1.3.4 平台相关的工具
+
+在C++标准库没有提供所需的性能或行为时，就需要使用与平台相关的工具
+
+为了方便地访问那些工具的同时，又使用标准C++线程库，在C++线程库中提供一个native_handle()成员函数，允许通过使用平台相关API直接操作底层实现。
+
+就其本质而言，任何使用native_handle()执行的操作都是完全依赖于平台的，
+
+# 1.4 一个简单的C++多线程程序
+
+单线程：
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    std::cout << "Hello World\n";
+
+    
+}
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+并发：
 
-### Jekyll Themes
+```cpp
+#include <iostream>
+#include <thread>
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Mighty-Frog/Concurrecy-Programming-Notes-CN-version/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+void hello() 
+{
+	std::cout << "Hello Concurrent World\n";
+}
 
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+int main()
+{
+	std::thread t(hello);
+	t.join();
+}
+```
