@@ -33,7 +33,7 @@ Tags: 《C++ Concurrency in Action》
 
 **任务切换也适用多线程。**即使是有真正硬件并发的系统，也容易出现比硬件“可并行最大任务数”更多的任务要执行**。此种情况下，任务切换仍然适用**
 
-![avatar](https://github.com/Mighty-Frog/Concurrecy-Programming-Notes-CN-version/blob/photos/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC++%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC++%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled.png?raw=true)
+![avatar](https://github.com/Mighty-Frog/Concurrecy-Programming-Notes-CN-version/blob/photos/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC++%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC++%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled%201.png?raw=true)
 
 图1.2 四个任务在两个核心之间切换，仍将任务整齐地划分为同等大小块的理想情况。实际上，许多因素会使得分割不均和调度不规则。
 
