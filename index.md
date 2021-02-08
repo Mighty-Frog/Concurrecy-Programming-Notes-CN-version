@@ -23,7 +23,7 @@ Tags: 《C++ Concurrency in Action》
 
      多核处理器（主要是单芯多核处理器）同时处理多个任务，称之为。
 
-![Image text](https://github.com/Mighty-Frog/Concurrecy-Programming-Notes-CN-version/blob/photos/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC%2B%2B%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC%2B%2B%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled.png)
+![avatar](https://github.com/Mighty-Frog/Concurrecy-Programming-Notes-CN-version/blob/photos/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC%2B%2B%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC%2B%2B%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled.png?raw=true)
 
 图 1.1 并发的两种方式：双核机器的真正并行 Vs. 单核机器的任务切换。 每个任务切分成了10个相等大小的块。双核处理器上每个任务可以在各自的处理核心上执行：单核处理器上每个任务交织进行。
 
@@ -45,7 +45,7 @@ Tags: 《C++ Concurrency in Action》
 
 应用程序分为多个独立的进程，它们在同一时刻运行，就像同时进行网页浏览和文字处理一样。多者通多进程间常规的通信渠道传递讯息 (信号、套接字、文件、管道等等)。
 
-![avatar](https://github.com/Mighty-Frog/Concurrecy-Programming-Notes-CN-version/blob/photos/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC%2B%2B%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC%2B%2B%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled%202.png)
+![avatar](https://raw.githubusercontent.com/Mighty-Frog/Concurrecy-Programming-Notes-CN-version/photos/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC%2B%2B%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC%2B%2B%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled%202.png)
 
 图 1.3 一对并发运行的进程之间的通信
 
@@ -67,7 +67,7 @@ Tags: 《C++ Concurrency in Action》
 
 相比较下，进程间通常共享内存，但此种共享难以建立和管理（同一数据的内存地址在不同的进程中是不相同的）
 
-![avatar](https://github.com/Mighty-Frog/Concurrecy-Programming-Notes-CN-version/blob/photos/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC%2B%2B%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC%2B%2B%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled%203.png)
+![avatar](https://raw.githubusercontent.com/Mighty-Frog/Concurrecy-Programming-Notes-CN-version/photos/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E4%BD%A0%E5%A5%BD%EF%BC%8CC%2B%2B%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B8%96%E7%95%8C%20-%20%E3%80%8AC%2B%2B%20Concurrency%20in%20Action%E3%80%8B%205dcac9d6995e483894f49459298df553/Untitled%203.png)
 
 图 1.4 同一进程中的一对并发运行的线程之间的通信
 
