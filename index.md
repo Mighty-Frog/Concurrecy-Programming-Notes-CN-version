@@ -15,11 +15,11 @@ Tags: 《C++ Concurrency in Action》
 
 ### **1.1.1 计算机系统中的并发**
 
-          **并发的假象：**
+   **并发的假象：**
 
-           单处理单元（processing unit） or 核心（core）同一时间只能处理一个任务，但在短时间内进行了多次的任务切换，看起来是并发的。
+      单处理单元（processing unit） or 核心（core）同一时间只能处理一个任务，但在短时间内进行了多次的任务切换，看起来是并发的。
 
-     **硬件并发（hardware concurrency）**：
+   **硬件并发（hardware concurrency）**：
 
      多核处理器（主要是单芯多核处理器）同时处理多个任务，称之为。
 
